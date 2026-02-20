@@ -24,5 +24,3 @@ class Reservation(Base):
     user: Mapped["User"] = relationship("User", back_populates="reservations")
     room: Mapped["Room"] = relationship("Room", back_populates="reservations")
 
-
-너무 
