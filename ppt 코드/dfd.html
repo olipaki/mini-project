@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2. 실현가능성 · 3. 성장전략</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #fff;
+  color: #1A1A1A;
+  width: 960px;
+  margin: 0 auto;
+  padding: 32px 36px 44px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ── PAGE TITLE ── */
+.page-title-wrap { display:flex; align-items:center; gap:12px; margin-bottom:26px; }
+.page-title-box {
+  border: 2px solid #1A1A1A; padding: 7px 20px;
+  font-size: 16px; font-weight: 900; position: relative;
+}
+.page-title-box::after {
+  content:''; position:absolute; bottom:-2px; right:-13px;
+  width:0; height:0;
+  border-top:18px solid transparent; border-bottom:18px solid transparent;
+  border-left:13px solid #1A1A1A;
+}
+.page-title-sub {
+  font-size:13px; color:#6B6966; font-weight:400;
+}
+
+/* ── SECTION HEADER ── */
+.sec-header {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:14px; margin-top:24px;
+}
+.sec-num {
+  background:#0B1C3D; color:#fff;
+  font-size:10px; font-weight:700; padding:3px 10px;
+  border-radius:3px; letter-spacing:0.07em;
+}
+.sec-title { font-size:15px; font-weight:900; color:#0B1C3D; }
+.sec-desc { font-size:11px; color:#6B6966; margin-top:1px; }
+
+.divider { border:none; border-top:1px solid #E0DED6; margin:22px 0; }
+
+/* ═══════════════════════
+   2. 실현가능성
+═══════════════════════ */
+
+/* MVP 구현 현황 — 선행구현 강조 */
+.impl-row {
+  display:grid; grid-template-columns:1fr 2fr; gap:14px;
+  margin-bottom:14px;
+}
+.impl-left {
+  background:#0B1C3D; border-radius:10px; padding:18px;
+  color:#fff; display:flex; flex-direction:column; justify-content:space-between;
+}
+.impl-left-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(93,202,165,0.18); border:1px solid rgba(93,202,165,0.35);
+  color:#5DCAA5; font-size:10px; font-weight:700;
+  padding:3px 9px; border-radius:10px; margin-bottom:10px;
+  width:fit-content;
+}
+.impl-left-title { font-size:15px; font-weight:900; line-height:1.4; margin-bottom:6px; }
+.impl-left-title span { color:#5DCAA5; }
+.impl-left-desc { font-size:11px; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:14px; }
+.impl-metrics {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.1); border-radius:6px; overflow:hidden;
+}
+.impl-m { background:rgba(255,255,255,0.05); padding:10px 8px; text-align:center; }
+.impl-m .n { font-size:18px; font-weight:900; color:#5DCAA5; }
+.impl-m .l { font-size:9px; color:rgba(255,255,255,0.45); margin-top:2px; }
+
+.impl-right { display:flex; flex-direction:column; gap:8px; }
+.feature-item {
+  display:flex; align-items:flex-start; gap:10px;
+  background:#F5F4F0; border-radius:7px; padding:10px 12px;
+  border-left:3px solid;
+}
+.feature-item.blue  { border-color:#1C5FA8; }
+.feature-item.teal  { border-color:#0D7B6C; }
+.feature-item.amber { border-color:#C27B00; }
+.feature-dot {
+  width:24px; height:24px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; flex-shrink:0;
+}
+.feature-item.blue  .feature-dot { background:#EAF2FB; }
+.feature-item.teal  .feature-dot { background:#E1F5EE; }
+.feature-item.amber .feature-dot { background:#FAEEDA; }
+.feature-title { font-size:12px; font-weight:700; color:#0B1C3D; margin-bottom:2px; }
+.feature-desc  { font-size:10px; color:#6B6966; line-height:1.5; }
+.feature-status {
+  margin-left:auto; flex-shrink:0;
+  font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px;
+}
+.status-done    { background:#E1F5EE; color:#0D7B6C; border:1px solid #9FE1CB; }
+.status-plan    { background:#EAF2FB; color:#1C5FA8; border:1px solid #B5D4F4; }
+.status-phase2  { background:#FAEEDA; color:#C27B00; border:1px solid #F5D88A; }
+
+/* ── DIFF TABLE ── */
+.diff-wrap {
+  border:1px solid #E0DED6; border-radius:8px; overflow:hidden;
+  margin-bottom:0;
+}
+.diff-table { width:100%; border-collapse:collapse; font-size:11px; }
+.diff-table th {
+  padding:9px 12px; text-align:center;
+  font-size:10px; font-weight:700; letter-spacing:0.05em;
+}
+.diff-table th:first-child { text-align:left; background:#F5F4F0; color:#6B6966; }
+.diff-table thead tr th:nth-child(2) { background:#F5F4F0; color:#6B6966; }
+.diff-table thead tr th:nth-child(3) { background:#0B1C3D; color:#5DCAA5; }
+.diff-table thead tr th:nth-child(4) { background:#F5F4F0; color:#6B6966; }
+.diff-table tbody tr { border-top:1px solid #F0EEE8; }
+.diff-table tbody tr:nth-child(even) { background:#FAFAF8; }
+.diff-table td { padding:9px 12px; color:#3D3D3A; }
+.diff-table td:first-child { font-weight:600; color:#0B1C3D; font-size:11px; }
+.diff-table td:not(:first-child) { text-align:center; }
+.ck  { color:#0D7B6C; font-size:14px; font-weight:700; }
+.cr  { color:#C8C6BE; font-size:14px; }
+.cp  { color:#C27B00; font-size:12px; }
+
+/* ═══════════════════════
+   GANTT
+═══════════════════════ */
+.gantt-wrap {
+  border:1px solid #E0DED6; border-radius:8px; overflow:hidden;
+}
+.gantt-head {
+  display:grid; grid-template-columns:160px repeat(9,1fr);
+  background:#0B1C3D;
+  font-size:10px; font-weight:600; color:rgba(255,255,255,0.65);
+}
+.gantt-head div { padding:8px 4px; text-align:center; border-right:1px solid rgba(255,255,255,0.08); }
+.gantt-head div:first-child { text-align:left; padding-left:12px; }
+.gantt-row {
+  display:grid; grid-template-columns:160px repeat(9,1fr);
+  border-bottom:1px solid #F0EEE8; font-size:10px;
+}
+.gantt-row:last-child { border-bottom:none; }
+.gantt-lbl {
+  padding:7px 10px 7px 12px; color:#3D3D3A; font-weight:500;
+  border-right:1px solid #F0EEE8;
+  display:flex; align-items:center; font-size:10px; line-height:1.4;
+}
+.gantt-cell { border-right:1px solid #F0EEE8; padding:5px 2px; display:flex; align-items:center; justify-content:center; }
+.gantt-bar {
+  height:18px; border-radius:3px;
+  font-size:9px; font-weight:700; color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  white-space:nowrap; letter-spacing:0.02em;
+  width:100%;
+}
+.gb-blue   { background:#1C5FA8; }
+.gb-teal   { background:#0D7B6C; }
+.gb-amber  { background:#C27B00; }
+.gb-accent { background:#E85D24; }
+.gb-navy   { background:#0B1C3D; }
+
+/* phase badge */
+.phase-row {
+  display:grid; grid-template-columns:160px repeat(9,1fr);
+  background:#F5F4F0; border-bottom:1px solid #E0DED6;
+}
+.phase-cell { padding:4px 2px; text-align:center; font-size:9px; font-weight:700; color:#6B6966; border-right:1px solid #E0DED6; }
+.phase-cell.p1 { background:#EAF2FB; color:#1C5FA8; }
+.phase-cell.p2 { background:#E1F5EE; color:#0D7B6C; }
+.phase-cell.p3 { background:#FFF0EA; color:#E85D24; }
+
+/* ═══════════════════════
+   3. 성장전략
+═══════════════════════ */
+
+/* 시장 진입 funnel */
+.strategy-row {
+  display:grid; grid-template-columns:1.1fr 1fr; gap:14px;
+  margin-bottom:14px;
+}
+
+.funnel-wrap {
+  border:1px solid #E0DED6; border-radius:8px; overflow:hidden;
+}
+.funnel-header { background:#0D7B6C; color:#fff; padding:9px 14px; font-size:11px; font-weight:700; }
+.funnel-body { padding:14px; }
+.funnel-step {
+  display:flex; align-items:stretch; gap:8px; margin-bottom:6px;
+}
+.funnel-step:last-child { margin-bottom:0; }
+.funnel-num {
+  width:22px; height:22px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; color:#fff; margin-top:1px;
+}
+.fn1 { background:#1C5FA8; }
+.fn2 { background:#0D7B6C; }
+.fn3 { background:#C27B00; }
+.fn4 { background:#0B1C3D; }
+.funnel-content { flex:1; }
+.funnel-label { font-size:12px; font-weight:700; color:#0B1C3D; margin-bottom:2px; }
+.funnel-desc   { font-size:10px; color:#6B6966; line-height:1.5; }
+.funnel-bar-track { height:6px; background:#F0EEE8; border-radius:3px; margin-top:5px; overflow:hidden; }
+.funnel-bar-fill  { height:100%; border-radius:3px; }
+.funnel-arrow { text-align:center; color:#C8C6BE; font-size:16px; margin:2px 0; padding-left:30px; }
+
+.moat-wrap {
+  background:#0B1C3D; border-radius:8px; padding:18px;
+  color:#fff;
+}
+.moat-title { font-size:13px; font-weight:700; margin-bottom:14px; }
+.moat-item {
+  display:flex; gap:10px; margin-bottom:12px;
+  padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.moat-item:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.moat-dot { width:8px; height:8px; border-radius:50%; background:#5DCAA5; flex-shrink:0; margin-top:4px; }
+.moat-text { font-size:11px; color:rgba(255,255,255,0.75); line-height:1.6; }
+.moat-text strong { color:#5DCAA5; display:block; font-size:12px; margin-bottom:2px; }
+
+/* ── BIZ MODEL ── */
+.biz-row {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px; margin-bottom:14px;
+}
+.biz-card {
+  border-radius:8px; padding:16px;
+  border:1.5px solid;
+}
+.biz-card.primary { background:#0B1C3D; border-color:#0B1C3D; }
+.biz-card.sec1    { background:#fff; border-color:#E0DED6; }
+.biz-card.sec2    { background:#fff; border-color:#E0DED6; }
+.biz-badge-tag {
+  font-size:9px; font-weight:700; letter-spacing:0.07em;
+  padding:2px 8px; border-radius:10px; margin-bottom:10px;
+  display:inline-block;
+}
+.biz-card.primary .biz-badge-tag { background:rgba(93,202,165,0.2); color:#5DCAA5; }
+.biz-card.sec1    .biz-badge-tag { background:#EAF2FB; color:#1C5FA8; }
+.biz-card.sec2    .biz-badge-tag { background:#FAEEDA; color:#C27B00; }
+.biz-title { font-size:13px; font-weight:700; margin-bottom:5px; }
+.biz-card.primary .biz-title { color:#fff; }
+.biz-card.sec1    .biz-title { color:#0B1C3D; }
+.biz-card.sec2    .biz-title { color:#0B1C3D; }
+.biz-price { font-size:22px; font-weight:900; line-height:1.1; margin-bottom:2px; }
+.biz-card.primary .biz-price { color:#5DCAA5; }
+.biz-card.sec1    .biz-price { color:#1C5FA8; }
+.biz-card.sec2    .biz-price { color:#C27B00; }
+.biz-price-sub { font-size:10px; margin-bottom:10px; }
+.biz-card.primary .biz-price-sub { color:rgba(255,255,255,0.45); }
+.biz-card.sec1    .biz-price-sub { color:#6B6966; }
+.biz-card.sec2    .biz-price-sub { color:#6B6966; }
+.biz-items { list-style:none; }
+.biz-items li {
+  font-size:11px; padding:4px 0;
+  border-bottom:1px solid; display:flex; gap:6px;
+}
+.biz-card.primary .biz-items li { border-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.75); }
+.biz-card.sec1    .biz-items li { border-color:#F0EEE8; color:#3D3D3A; }
+.biz-card.sec2    .biz-items li { border-color:#F0EEE8; color:#3D3D3A; }
+.biz-items li::before { content:'·'; flex-shrink:0; }
+.biz-card.primary .biz-items li::before { color:#5DCAA5; }
+.biz-card.sec1    .biz-items li::before { color:#1C5FA8; }
+.biz-card.sec2    .biz-items li::before { color:#C27B00; }
+
+/* ── ROADMAP ── */
+.roadmap-row {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.rm-card {
+  border-radius:8px; padding:18px; position:relative; overflow:hidden;
+}
+.rm-card::before {
+  content:''; position:absolute; top:-20px; right:-20px;
+  width:80px; height:80px; border-radius:50%; border:16px solid;
+}
+.rm-card.c1 { background:#1C5FA8; }
+.rm-card.c2 { background:#0D7B6C; }
+.rm-card.c3 { background:#E85D24; }
+.rm-card.c1::before { border-color:rgba(255,255,255,0.1); }
+.rm-card.c2::before { border-color:rgba(255,255,255,0.1); }
+.rm-card.c3::before { border-color:rgba(255,255,255,0.1); }
+.rm-step {
+  font-size:9px; font-weight:700; letter-spacing:0.1em;
+  color:rgba(255,255,255,0.55); text-transform:uppercase;
+  margin-bottom:5px;
+}
+.rm-period { font-size:11px; color:rgba(255,255,255,0.55); margin-bottom:6px; }
+.rm-title  { font-size:16px; font-weight:900; color:#fff; line-height:1.3; margin-bottom:8px; }
+.rm-items { list-style:none; }
+.rm-items li {
+  font-size:10px; color:rgba(255,255,255,0.78);
+  padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.1);
+  display:flex; gap:5px;
+}
+.rm-items li::before { content:'→'; color:rgba(255,255,255,0.35); flex-shrink:0; }
+.rm-items li:last-child { border-bottom:none; }
+
+/* ── BOTTOM CONCLUSION ── */
+.bottom-bar {
+  margin-top:18px;
+  background:#0B1C3D; border-radius:8px;
+  padding:14px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.bb-left { font-size:13px; font-weight:700; color:#5DCAA5; line-height:1.4; }
+.bb-left span { display:block; color:rgba(255,255,255,0.55); font-size:10px; font-weight:400; margin-top:2px; }
+.bb-right { display:flex; gap:20px; }
+.bb-stat { text-align:center; }
+.bb-stat .n { font-size:20px; font-weight:900; color:#5DCAA5; }
+.bb-stat .l { font-size:9px; color:rgba(255,255,255,0.4); margin-top:1px; }
+.bb-div { width:1px; background:rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+
+<!-- ══ PAGE TITLE ══ -->
+<div class="page-title-wrap">
+  <div class="page-title-box">2. 실현가능성 · 3. 성장전략</div>
+  <div class="page-title-sub">개발 구체화 계획 · 차별성 · 시장진입 · 비즈니스 모델 · 로드맵</div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     2. 실현가능성
+═══════════════════════════════════ -->
+<div class="sec-header">
+  <span class="sec-num">2-1 · 2-2</span>
+  <div>
+    <div class="sec-title">개발 구체화 계획 & 차별성</div>
+  </div>
+</div>
+
+<!-- 선행구현 + 기능 목록 -->
+<div class="impl-row">
+  <div class="impl-left">
+    <div>
+      <div class="impl-left-badge">★ 선행 구현 완료</div>
+      <div class="impl-left-title">핵심 기능<br><span>이미 현업 실사용 중</span></div>
+      <div class="impl-left-desc">공장 인증·감사 관리 핵심 기능을 선행 구현. 수출 중견기업 SR·QA 실무진이 실무에서 활용 중이며, 협약기간 8개월 내 SaaS MVP로 완성한다.</div>
+    </div>
+    <div class="impl-metrics">
+      <div class="impl-m"><div class="n">8개월</div><div class="l">협약기간 내 MVP</div></div>
+      <div class="impl-m"><div class="n">현업</div><div class="l">선행 구현 실사용</div></div>
+      <div class="impl-m"><div class="n">SaaS</div><div class="l">웹 기반 구독형</div></div>
+    </div>
+  </div>
+
+  <div class="impl-right">
+    <div class="feature-item blue">
+      <div class="feature-dot">📋</div>
+      <div style="flex:1;">
+        <div class="feature-title">공장·바이어 등록 / 인증·감사·문서 관리</div>
+        <div class="feature-desc">공장별 인증서·감사보고서 통합 등록 · 만기 D-Day 자동 알림 · 주간 알림</div>
+      </div>
+      <span class="feature-status status-done">선행 구현</span>
+    </div>
+    <div class="feature-item blue">
+      <div class="feature-dot">🎯</div>
+      <div style="flex:1;">
+        <div class="feature-title">바이어 요구사항 Gap 자동 식별 · Action 추적</div>
+        <div class="feature-desc">기준(Baseline) 비교 → 미충족 Gap 자동 판정 → 담당·기한·완료 추적</div>
+      </div>
+      <span class="feature-status status-plan">1단계 개발</span>
+    </div>
+    <div class="feature-item teal">
+      <div class="feature-dot">📊</div>
+      <div style="flex:1;">
+        <div class="feature-title">ESG 엑셀 자동 업로드·파싱·연도별 비교</div>
+        <div class="feature-desc">표준양식 엑셀 업로드 → 단위환산·누적취합 자동화 · 연도별 비교 분석</div>
+      </div>
+      <span class="feature-status status-plan">1단계 개발</span>
+    </div>
+    <div class="feature-item amber">
+      <div class="feature-dot">🤖</div>
+      <div style="flex:1;">
+        <div class="feature-title">AI 분석·조치 제안 · 바이어 리포트 자동 번역·요약</div>
+        <div class="feature-desc">LangChain·RAG 기반 ESG 조치 제안 · 바이어 리포트 자동 번역·요약</div>
+      </div>
+      <span class="feature-status status-phase2">2단계 고도화</span>
+    </div>
+  </div>
+</div>
+
+<!-- 차별성 비교표 -->
+<div style="margin-bottom:4px; font-size:11px; font-weight:700; color:#0B1C3D; letter-spacing:0.03em; margin-top:14px;">
+  경쟁 차별성 — 기존 대체제 대비 비교
+</div>
+<div class="diff-wrap">
+  <table class="diff-table">
+    <thead>
+      <tr>
+        <th style="width:220px; text-align:left;">기능 항목</th>
+        <th>일반 문서관리 툴</th>
+        <th>본 서비스 ★</th>
+        <th>ERP 컴플라이언스</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>인증 만기 D-Day 자동 알림</td>
+        <td><span class="cr">✕</span></td><td><span class="ck">✓</span></td><td><span class="cp">△ 별도 설정</span></td>
+      </tr>
+      <tr>
+        <td>바이어 요구 vs 공장 Gap 자동 식별</td>
+        <td><span class="cr">✕</span></td><td><span class="ck">✓</span></td><td><span class="cr">✕</span></td>
+      </tr>
+      <tr>
+        <td>Action 담당·기한·완료 추적 연결</td>
+        <td><span class="cr">✕</span></td><td><span class="ck">✓</span></td><td><span class="cp">△ 일부</span></td>
+      </tr>
+      <tr>
+        <td>ESG 엑셀 자동 파싱·연도 비교</td>
+        <td><span class="cr">✕</span></td><td><span class="ck">✓</span></td><td><span class="cr">✕</span></td>
+      </tr>
+      <tr>
+        <td>AI 분석·바이어 리포트 자동 번역</td>
+        <td><span class="cr">✕</span></td><td><span class="ck">✓</span></td><td><span class="cr">✕</span></td>
+      </tr>
+      <tr>
+        <td>수출 중소·중견기업 최적화 SaaS</td>
+        <td><span class="cr">✕</span></td><td><span class="ck">✓</span></td><td><span class="cr">✕ 대기업 중심</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════
+     GANTT — 협약기간 내 일정
+═══════════════════════════════════ -->
+<div class="sec-header">
+  <span class="sec-num">2-3</span>
+  <div>
+    <div class="sec-title">사업추진 일정 (협약기간 26.04 ~ 26.12)</div>
+  </div>
+</div>
+
+<div class="gantt-wrap">
+  <!-- phase row -->
+  <div class="phase-row">
+    <div class="phase-cell" style="padding-left:12px; text-align:left; color:#6B6966; font-size:9px;">단계</div>
+    <div class="phase-cell p1" style="grid-column:span 2;">1단계 · MVP 개발</div>
+    <div class="phase-cell p1" style="grid-column:span 2;"></div>
+    <div class="phase-cell p1" style="grid-column:span 2;"></div>
+    <div class="phase-cell p2">파일럿</div>
+    <div class="phase-cell p3" style="grid-column:span 2;">시장진입</div>
+  </div>
+  <!-- header -->
+  <div class="gantt-head">
+    <div>업무</div>
+    <div>4월</div><div>5월</div><div>6월</div><div>7월</div><div>8월</div>
+    <div>9월</div><div>10월</div><div>11월</div><div>12월</div>
+  </div>
+  <!-- rows -->
+  <div class="gantt-row">
+    <div class="gantt-lbl">요구사항 정의·설계</div>
+    <div class="gantt-cell" style="grid-column:span 2;"><div class="gantt-bar gb-blue">IA·DB·ERD</div></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="gantt-lbl">핵심 기능 개발 1차</div>
+    <div class="gantt-cell"></div>
+    <div class="gantt-cell" style="grid-column:span 2;"><div class="gantt-bar gb-blue">공장·인증·문서·알림</div></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="gantt-lbl">핵심 기능 개발 2차</div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell" style="grid-column:span 2;"><div class="gantt-bar gb-teal">Gap 식별·Action 추적</div></div>
+    <div class="gantt-cell"></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="gantt-lbl">ESG·AI 기능 개발</div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell" style="grid-column:span 2;"><div class="gantt-bar gb-teal">ESG 파싱·AI 분석</div></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="gantt-lbl">대시보드·리포트 완성</div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell" style="grid-column:span 2;"><div class="gantt-bar gb-amber">통합 대시보드·UI/UX</div></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="gantt-lbl">파일럿 테스트·검증</div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell" style="grid-column:span 2;"><div class="gantt-bar gb-amber">현업 실무자 파일럿</div></div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div>
+  </div>
+  <div class="gantt-row">
+    <div class="gantt-lbl">시장진입 영업·시연</div>
+    <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+    <div class="gantt-cell" style="grid-column:span 3;"><div class="gantt-bar gb-accent">방문·시연·무료제공·유료전환</div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════
+     3. 성장전략
+═══════════════════════════════════ -->
+<div class="sec-header">
+  <span class="sec-num">3-1</span>
+  <div>
+    <div class="sec-title">목표 시장 진입 전략</div>
+  </div>
+</div>
+
+<div class="strategy-row">
+  <!-- 진입 단계 funnel -->
+  <div class="funnel-wrap">
+    <div class="funnel-header">단계별 시장 진입 경로</div>
+    <div class="funnel-body">
+      <div class="funnel-step">
+        <div class="funnel-num fn1">1</div>
+        <div class="funnel-content">
+          <div class="funnel-label">초기 실사용 기업 확보</div>
+          <div class="funnel-desc">수출 중견기업 SR·QA 실무진 — 현재 초기 대시보드 실사용 중 (검증 완료)</div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:100%; background:#1C5FA8;"></div></div>
+        </div>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-num fn2">2</div>
+        <div class="funnel-content">
+          <div class="funnel-label">파일럿 무료 제공 · 실데이터 수집</div>
+          <div class="funnel-desc">카테고리별 수출 중소·중견 제조기업 방문·시연 · ESG 실데이터 입력 지원</div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:80%; background:#0D7B6C;"></div></div>
+        </div>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-num fn3">3</div>
+        <div class="funnel-content">
+          <div class="funnel-label">유료 전환 · 레퍼런스 확산</div>
+          <div class="funnel-desc">파일럿 기업 구독 전환 · 동종 업계 레퍼런스 기반 확산</div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:60%; background:#C27B00;"></div></div>
+        </div>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-num fn4">4</div>
+        <div class="funnel-content">
+          <div class="funnel-label">ESG 데이터 자산 · 글로벌 확장</div>
+          <div class="funnel-desc">축적 ESG 데이터 → 분석 고도화 · 투자 유치 · 글로벌 공급망 수요 공략</div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:40%; background:#0B1C3D;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 경쟁 우위 -->
+  <div class="moat-wrap">
+    <div class="moat-title" style="color:#fff;">핵심 경쟁 우위 (Economic Moat)</div>
+    <div class="moat-item">
+      <div class="moat-dot"></div>
+      <div class="moat-text">
+        <strong>ESG 운영 데이터 자산 — 단기 복제 불가</strong>
+        제조현장 실ESG 데이터는 시장에서 무료 수집 불가. 이용 기업 증가 → 데이터 축적 → 분석 정확도 향상의 선순환 구조
+      </div>
+    </div>
+    <div class="moat-item">
+      <div class="moat-dot"></div>
+      <div class="moat-text">
+        <strong>현업 선행 구현 · 실사용 레퍼런스</strong>
+        수출 중견기업 SR·QA 실무 환경에서 이미 검증된 기능. 경쟁사 대비 시장 진입 속도 우위
+      </div>
+    </div>
+    <div class="moat-item">
+      <div class="moat-dot"></div>
+      <div class="moat-text">
+        <strong>전방위 통합 운영 구조 — 높은 전환 비용</strong>
+        인증·Gap·Action·ESG·AI 리포트를 단일 흐름으로 연결. 도입 후 전환 비용(switching cost) 자연 발생 → 고객 잠금 효과
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     3-2. 비즈니스 모델
+═══════════════════════════════════ -->
+<div class="sec-header">
+  <span class="sec-num">3-2</span>
+  <div>
+    <div class="sec-title">비즈니스 모델 (수익화)</div>
+  </div>
+</div>
+
+<div class="biz-row">
+  <div class="biz-card primary">
+    <div class="biz-badge-tag">핵심 수익원</div>
+    <div class="biz-title">기업 구독형 SaaS</div>
+    <div class="biz-price">월 50만~</div>
+    <div class="biz-price-sub">공장 수 기준 월정액 요금제</div>
+    <ul class="biz-items">
+      <li>5공장 이하 — 월 500,000원</li>
+      <li>10공장 이하 — 월 900,000원</li>
+      <li>인증·감사·ESG 기능 포함</li>
+      <li>대시보드·리포트 제공</li>
+    </ul>
+  </div>
+  <div class="biz-card sec1">
+    <div class="biz-badge-tag">초기 도입</div>
+    <div class="biz-title">셋업비 (1회성)</div>
+    <div class="biz-price" style="font-size:18px; line-height:1.4;">데이터 이관</div>
+    <div class="biz-price-sub">도입 시 설정·이관 1회성 비용</div>
+    <ul class="biz-items">
+      <li>기존 데이터 마이그레이션</li>
+      <li>바이어·공장 초기 설정</li>
+      <li>현업 온보딩 지원</li>
+    </ul>
+  </div>
+  <div class="biz-card sec2">
+    <div class="biz-badge-tag">2단계 확장</div>
+    <div class="biz-title">AI 분석 모듈</div>
+    <div class="biz-price" style="font-size:18px; line-height:1.4;">추가 과금</div>
+    <div class="biz-price-sub">고도화 기능 별도 구독</div>
+    <ul class="biz-items">
+      <li>ESG 자동 분석·AI 조치 제안</li>
+      <li>바이어 리포트 자동 번역·요약</li>
+      <li>전년도 비교 분석 대시보드</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     3-3. 전체 로드맵
+═══════════════════════════════════ -->
+<div class="sec-header">
+  <span class="sec-num">3-3</span>
+  <div>
+    <div class="sec-title">전체 로드맵</div>
+  </div>
+</div>
+
+<div class="roadmap-row">
+  <div class="rm-card c1">
+    <div class="rm-step">1단계</div>
+    <div class="rm-period">26.04 ~ 26.10</div>
+    <div class="rm-title">MVP 구현·<br>파일럿 검증</div>
+    <ul class="rm-items">
+      <li>SaaS MVP 단계적 개발 완성</li>
+      <li>초기 무료 제공 · 실사용 유입</li>
+      <li>실ESG 데이터 수집</li>
+      <li>유료 전환 협의 착수</li>
+    </ul>
+  </div>
+  <div class="rm-card c2">
+    <div class="rm-step">2단계</div>
+    <div class="rm-period">26.10 ~ 26.12</div>
+    <div class="rm-title">AI 고도화·<br>구독 매출 발생</div>
+    <ul class="rm-items">
+      <li>ESG AI 자동 분석·리포트 고도화</li>
+      <li>구독 요금제 적용 · 매출 발생</li>
+      <li>파일럿 레퍼런스 확산</li>
+      <li>동종 업계 영업 확대</li>
+    </ul>
+  </div>
+  <div class="rm-card c3">
+    <div class="rm-step">3단계</div>
+    <div class="rm-period">27.01 ~</div>
+    <div class="rm-title">데이터 자산·<br>투자 유치</div>
+    <ul class="rm-items">
+      <li>산업별 ESG 데이터 자산 고도화</li>
+      <li>구독 매출 확대</li>
+      <li>시드 투자 IR 진행</li>
+      <li>글로벌 공급망 수요 공략</li>
+    </ul>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bb-left">
+    MVP → 구독 매출 → ESG 데이터 자산 → 투자 유치 · 글로벌 확장
+    <span>8개월 협약기간 내 SaaS MVP 완성 · 현업 실사용 기반 유료 전환 검증</span>
+  </div>
+  <div class="bb-right">
+    <div class="bb-stat"><div class="n">8개월</div><div class="l">MVP 완성</div></div>
+    <div class="bb-div"></div>
+    <div class="bb-stat"><div class="n">월 50만~</div><div class="l">구독 시작가</div></div>
+    <div class="bb-div"></div>
+    <div class="bb-stat"><div class="n">3단계</div><div class="l">글로벌 확장</div></div>
+  </div>
+</div>
+
+</body>
+</html>
