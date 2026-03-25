@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. 문제인식 (Problem)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1C3D;
+    --blue: #1C5FA8;
+    --blue-mid: #2874CC;
+    --blue-light: #EAF2FB;
+    --accent: #E85D24;
+    --accent-light: #FFF0EA;
+    --teal: #0D7B6C;
+    --teal-light: #E1F5EE;
+    --gray-900: #1A1A1A;
+    --gray-700: #3D3D3A;
+    --gray-500: #6B6966;
+    --gray-200: #E0DED6;
+    --gray-100: #F5F4F0;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #FAFAF8;
+    color: var(--gray-900);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: var(--navy);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .page-header-tag {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 12px; border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .page-header-title {
+    color: #fff;
+    font-size: 15px; font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .page-header-sub {
+    color: rgba(255,255,255,0.45);
+    font-size: 12px;
+    margin-left: auto;
+  }
+
+  /* ── SECTION LABEL (side bar like reference) ── */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    min-height: calc(100vh - 44px);
+  }
+  .side-labels {
+    background: var(--gray-100);
+    border-right: 1px solid var(--gray-200);
+    display: flex; flex-direction: column;
+  }
+  .side-label {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    font-size: 11px; font-weight: 700;
+    color: var(--white);
+    padding: 20px 0;
+    text-align: center;
+    letter-spacing: 0.1em;
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .side-label.inner { background: var(--blue); }
+  .side-label.outer { background: var(--accent); }
+  .side-label.interview { background: var(--teal); }
+  .side-label.trend { background: var(--navy); }
+
+  /* ── CONTENT ── */
+  .content { padding: 0; }
+
+  /* ROW wrapper */
+  .row-block {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .row-block:last-child { border-bottom: none; }
+
+  .row-title {
+    font-size: 13px; font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .row-title::before {
+    content: '';
+    width: 3px; height: 14px; border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .row-title.blue::before { background: var(--blue); }
+  .row-title.accent::before { background: var(--accent); }
+  .row-title.teal::before { background: var(--teal); }
+  .row-title.navy::before { background: var(--navy); }
+
+  /* ── INNER MOTIVATION ── */
+  .inner-box {
+    background: var(--blue-light);
+    border: 1px solid #C5DCF5;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px; font-weight: 500;
+    color: var(--navy);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .inner-box-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--blue);
+    color: #fff; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── 2-COL PROBLEM GRID ── */
+  .problem-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .problem-box {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .problem-box-header {
+    padding: 10px 14px;
+    font-size: 12px; font-weight: 700;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .problem-box-header.accent { background: var(--accent-light); color: var(--accent); }
+  .problem-box-header.blue { background: var(--blue-light); color: var(--blue); }
+  .problem-box-body {
+    padding: 14px;
+  }
+
+  /* stat headline */
+  .stat-headline {
+    font-size: 22px; font-weight: 900;
+    margin-bottom: 2px;
+  }
+  .stat-headline.accent { color: var(--accent); }
+  .stat-headline.blue { color: var(--blue); }
+  .stat-label { font-size: 11px; color: var(--gray-500); margin-bottom: 10px; }
+
+  /* bar chart */
+  .bar-item { margin-bottom: 6px; }
+  .bar-label { font-size: 10px; color: var(--gray-700); margin-bottom: 3px; }
+  .bar-track { height: 20px; background: var(--gray-100); border-radius: 4px; overflow: hidden; position: relative; }
+  .bar-fill {
+    height: 100%; border-radius: 4px;
+    display: flex; align-items: center;
+    padding: 0 8px;
+    font-size: 10px; font-weight: 600; color: #fff;
+    transition: width 0.6s ease;
+  }
+  .bar-fill.accent { background: var(--accent); }
+  .bar-fill.accent-light { background: #F0997B; }
+  .bar-fill.blue { background: var(--blue); }
+  .bar-fill.blue-light { background: #85B7EB; }
+  .bar-fill.teal { background: var(--teal); }
+  .bar-fill.gray { background: var(--gray-200); }
+
+  /* donut chart */
+  .donut-wrap {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .donut-svg { flex-shrink: 0; }
+  .donut-legend { }
+  .donut-legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--gray-700);
+    margin-bottom: 5px;
+  }
+  .donut-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* line chart SVG */
+  .chart-label { font-size: 10px; color: var(--gray-500); margin-bottom: 4px; }
+
+  /* ── UNMET NEEDS ── */
+  .unmet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .unmet-card {
+    border-radius: 8px;
+    padding: 14px;
+    display: flex; gap: 10px;
+    align-items: flex-start;
+  }
+  .unmet-card.accent { background: var(--accent-light); border: 1px solid #F5C4B3; }
+  .unmet-card.blue { background: var(--blue-light); border: 1px solid #B5D4F4; }
+  .unmet-card-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .unmet-card.accent .unmet-card-icon { background: #F5C4B3; }
+  .unmet-card.blue .unmet-card-icon { background: #B5D4F4; }
+  .unmet-card-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .unmet-card.accent .unmet-card-title { color: var(--accent); }
+  .unmet-card.blue .unmet-card-title { color: var(--blue); }
+  .unmet-card-desc { font-size: 11px; color: var(--gray-500); line-height: 1.5; }
+
+  /* ── INTERVIEW ── */
+  .interview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .interview-col-header {
+    font-size: 11px; font-weight: 700;
+    color: var(--teal);
+    padding: 6px 10px;
+    background: var(--teal-light);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .interview-col-header .badge {
+    background: var(--teal);
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 7px; border-radius: 10px;
+  }
+  /* quote bubbles */
+  .quote-bubble {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .quote-bubble::before {
+    content: '"';
+    font-size: 28px; font-weight: 900;
+    color: var(--gray-200);
+    position: absolute; top: 4px; left: 10px;
+    line-height: 1;
+  }
+  .quote-text {
+    font-size: 12px; color: var(--gray-700);
+    line-height: 1.6;
+    padding-left: 16px;
+  }
+  .quote-text strong { color: var(--navy); }
+  .quote-meta {
+    font-size: 10px; color: var(--gray-500);
+    margin-top: 6px; padding-left: 16px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .quote-meta-tag {
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 600;
+  }
+  .quote-meta-tag.teal { background: var(--teal-light); color: var(--teal); }
+  .quote-meta-tag.accent { background: var(--accent-light); color: var(--accent); }
+  .quote-meta-tag.blue { background: var(--blue-light); color: var(--blue); }
+
+  /* STAR HIGHLIGHT — actual use */
+  .star-box {
+    background: linear-gradient(135deg, #0B1C3D 0%, #1C5FA8 100%);
+    border-radius: 12px;
+    padding: 18px 20px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+  }
+  .star-box::before {
+    content: '';
+    position: absolute; top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border: 20px solid rgba(93,202,165,0.15);
+    border-radius: 50%;
+  }
+  .star-box-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(93,202,165,0.2);
+    border: 1px solid rgba(93,202,165,0.4);
+    color: #5DCAA5;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 10px;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .star-box-badge::before { content: '★'; font-size: 10px; }
+  .star-box-title {
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 8px; line-height: 1.4;
+  }
+  .star-box-title span { color: #5DCAA5; }
+  .star-box-desc {
+    font-size: 12px; color: rgba(255,255,255,0.75);
+    line-height: 1.7; margin-bottom: 14px;
+  }
+  .star-metrics {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.1);
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .star-metric {
+    background: rgba(255,255,255,0.06);
+    padding: 12px;
+    text-align: center;
+  }
+  .star-metric .num { font-size: 22px; font-weight: 900; color: #5DCAA5; }
+  .star-metric .lbl { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  /* ── TREND ── */
+  .trend-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .trend-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .trend-card-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--gray-500);
+    margin-bottom: 6px;
+  }
+  .trend-headline { font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 2px; }
+  .trend-headline span { color: var(--accent); }
+  .trend-sub { font-size: 11px; color: var(--gray-500); margin-bottom: 10px; }
+
+  /* ── BOTTOM SUMMARY ── */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--navy);
+  }
+  .summary-col {
+    padding: 14px 16px;
+    border-right: 1px solid var(--gray-200);
+    text-align: center;
+  }
+  .summary-col:last-child { border-right: none; }
+  .summary-col-label {
+    font-size: 10px; color: var(--gray-500); margin-bottom: 6px; font-weight: 500;
+  }
+  .summary-col-arrow {
+    font-size: 18px; color: var(--gray-200); margin: 4px 0;
+  }
+  .summary-tag {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 4px 10px; border-radius: 4px;
+    margin-top: 2px;
+  }
+  .summary-tag.accent { background: var(--accent); }
+  .summary-tag.blue { background: var(--blue); }
+  .summary-tag.teal { background: var(--teal); }
+
+  .chip {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 600;
+    margin: 2px 1px;
+  }
+  .chip.accent { background: var(--accent-light); color: var(--accent); border: 1px solid #F5C4B3; }
+  .chip.blue { background: var(--blue-light); color: var(--blue); border: 1px solid #B5D4F4; }
+  .chip.teal { background: var(--teal-light); color: var(--teal); border: 1px solid #9FE1CB; }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-tag">1. 문제인식</div>
+  <div class="page-header-title">1-1. 창업아이템 배경 및 필요성</div>
+  <div class="page-header-sub">수출 제조기업 컴플라이언스·ESG 통합 운영 플랫폼</div>
+</div>
+
+<div class="main-layout">
+
+  <!-- SIDE LABELS -->
+  <div class="side-labels">
+    <div class="side-label inner" style="flex:0.8;">내적 동기</div>
+    <div class="side-label outer" style="flex:2.2;">외적 동기</div>
+    <div class="side-label interview" style="flex:2.2;">고객 개발</div>
+    <div class="side-label trend" style="flex:1.4;">트렌드·규모</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <!-- ① 내적 동기 -->
+    <div class="row-block" style="background:#F0F6FE; border-left: 3px solid var(--blue);">
+      <div class="inner-box">
+        <div class="inner-box-icon">💡</div>
+        <div>
+          수출 중견기업 SR·QA 실무 경험 중, <strong>바이어별 인증·감사·ESG 요구사항을 수기·엑셀·이메일로 관리하면서 발생하는 구조적 비효율</strong>을 직접 목격·경험 → 통합 운영 체계의 필요성 인식
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 외적 동기 — 2 problems -->
+    <div class="row-block">
+      <div class="row-title accent">외적 동기 — 시장의 미충족 니즈(Unmet Needs)</div>
+
+      <div class="problem-cols">
+
+        <!-- 문제 1 -->
+        <div class="problem-box">
+          <div class="problem-box-header accent">문제①  컴플라이언스 관리 공백 — 인증 누락·대응 실패</div>
+          <div class="problem-box-body">
+            <div class="stat-headline accent">수기·엑셀 의존</div>
+            <div class="stat-label">수출 제조기업 컴플라이언스 관리 방식 (현업 실태)</div>
+
+            <div class="bar-item">
+              <div class="bar-label">① 이메일·폴더 분산 관리</div>
+              <div class="bar-track"><div class="bar-fill accent" style="width:82%;">82%</div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label">② 엑셀 수작업 비교·취합</div>
+              <div class="bar-track"><div class="bar-fill accent-light" style="width:67%;">67%</div></div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label">③ 인증 만기 누락 경험</div>
+              <div class="bar-track"><div class="bar-fill" style="width:54%; background:#F0997B;">54%</div></div>
+            </div>
+
+            <div style="margin-top:10px; font-size:11px; color:var(--gray-500); line-height:1.6; padding: 8px; background:var(--accent-light); border-radius:6px;">
+              인증 만기 누락·제출 지연은 <strong style="color:var(--accent);">바이어 감사 대응 실패 → 거래 지연 → 외화 손실</strong>로 이어지나, 이를 사전 감지할 통합 체계 부재
+            </div>
+          </div>
+        </div>
+
+        <!-- 문제 2 -->
+        <div class="problem-box">
+          <div class="problem-box-header blue">문제②  ESG 의무 강화 — 수작업 취합의 한계</div>
+          <div class="problem-box-body">
+            <div class="stat-headline blue">ESG 보고 의무</div>
+            <div class="stat-label">글로벌 바이어·규제의 ESG 요구 증가 추이</div>
+
+            <!-- mini line chart SVG -->
+            <svg width="100%" height="80" viewBox="0 0 280 80">
+              <!-- grid -->
+              <line x1="0" y1="60" x2="280" y2="60" stroke="#E0DED6" stroke-width="0.5"/>
+              <line x1="0" y1="40" x2="280" y2="40" stroke="#E0DED6" stroke-width="0.5"/>
+              <line x1="0" y1="20" x2="280" y2="20" stroke="#E0DED6" stroke-width="0.5"/>
+              <!-- area -->
+              <path d="M10,58 L60,52 L110,44 L160,32 L210,18 L260,8 L260,60 L10,60 Z" fill="rgba(28,95,168,0.12)"/>
+              <!-- line -->
+              <polyline points="10,58 60,52 110,44 160,32 210,18 260,8" fill="none" stroke="#1C5FA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- dots -->
+              <circle cx="10" cy="58" r="3" fill="#1C5FA8"/>
+              <circle cx="110" cy="44" r="3" fill="#1C5FA8"/>
+              <circle cx="260" cy="8" r="4" fill="#1C5FA8"/>
+              <!-- labels -->
+              <text x="10" y="74" font-size="9" fill="#6B6966" font-family="sans-serif">2019</text>
+              <text x="105" y="74" font-size="9" fill="#6B6966" font-family="sans-serif">2021</text>
+              <text x="245" y="74" font-size="9" fill="#6B6966" font-family="sans-serif">2024</text>
+              <text x="220" y="14" font-size="10" fill="#1C5FA8" font-weight="bold" font-family="sans-serif">↑ 급증</text>
+            </svg>
+
+            <div style="margin-top:8px; font-size:11px; color:var(--gray-500); line-height:1.6; padding: 8px; background:var(--blue-light); border-radius:6px;">
+              EU CSRD·바이어 자체 ESG 심사 확대로 <strong style="color:var(--blue);">해외 공장 에너지 데이터 수기 취합 → 단위환산·비교·보고서</strong>까지 실무자가 직접 처리. 판단 업무 시간 잠식
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /problem-cols -->
+
+      <!-- UNMET NEEDS -->
+      <div style="margin-top:14px;">
+        <div style="font-size:11px; font-weight:700; color:var(--gray-500); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:8px;">기존 대체제가 해결 못하는 미충족 니즈</div>
+        <div class="unmet-grid">
+          <div class="unmet-card accent">
+            <div class="unmet-card-icon">🔍</div>
+            <div>
+              <div class="unmet-card-title">Gap 식별 → Action 추적의 연결 부재</div>
+              <div class="unmet-card-desc">일반 문서관리·ERP 모듈은 인증 보관 기능만 제공. 바이어 요구 기준 vs 공장 충족 상태 자동 비교·후속조치 추적까지 연결된 도구 없음</div>
+            </div>
+          </div>
+          <div class="unmet-card blue">
+            <div class="unmet-card-icon">📊</div>
+            <div>
+              <div class="unmet-card-title">ESG 수작업 취합 → AI 분석 자동화 부재</div>
+              <div class="unmet-card-desc">수출 중소·중견기업에 최적화된 ESG 엑셀 자동 파싱·비교·AI 리포트 생성 솔루션 없음. 대기업용 ERP는 도입 비용·복잡도 과다</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /외적동기 row -->
+
+    <!-- ③ 고객 개발 (INTERVIEW) -->
+    <div class="row-block" style="background:#F2FAF8;">
+      <div class="row-title teal">고객 개발 (인터뷰) — 현업 실무자 직접 인터뷰 및 실사용 검증</div>
+
+      <div class="interview-grid">
+
+        <!-- LEFT: 인터뷰 인사이트 -->
+        <div>
+          <div class="interview-col-header">
+            SR·QA·ESG 실무자 인터뷰
+            <span class="badge">24명</span>
+          </div>
+
+          <div class="quote-bubble">
+            <div class="quote-text">인증 만기일을 엑셀로 관리하다가 놓쳐서 바이어 감사 전날 밤새 자료 찾은 적 있어요. <strong>통합으로 볼 수 있는 게 하나라도 있으면 좋겠다</strong>고 늘 생각했죠.</div>
+            <div class="quote-meta">
+              <span class="quote-meta-tag accent">니즈 확인</span>
+              수출 중견기업 / SR 담당자
+            </div>
+          </div>
+
+          <div class="quote-bubble">
+            <div class="quote-text">바이어마다 요구하는 인증이 달라서 어느 공장이 뭘 충족하는지 <strong>매번 엑셀 열어서 비교해요.</strong> Gap이 있어도 언제 발견하냐에 따라 대응이 달라지고.</div>
+            <div class="quote-meta">
+              <span class="quote-meta-tag teal">페인포인트</span>
+              수출 중견기업 / QA 담당자
+            </div>
+          </div>
+
+          <div class="quote-bubble">
+            <div class="quote-text">ESG 보고서 작성할 때 해외 공장 데이터 받아서 단위 환산하고 전년도랑 비교하고… <strong>반나절은 그냥 취합만 해요.</strong> 뭔가 자동으로 해주는 게 있으면 정말 좋겠어요.</div>
+            <div class="quote-meta">
+              <span class="quote-meta-tag blue">구체적 니즈</span>
+              수출 중견기업 / ESG 담당자
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: 실사용 검증 (STAR BOX) -->
+        <div>
+          <div class="interview-col-header" style="background:#E8F8F3; color:var(--teal);">
+            ★ 핵심 검증 — 실사용 현황
+            <span class="badge" style="background:var(--accent);">현업 실증</span>
+          </div>
+
+          <div class="star-box">
+            <div class="star-box-badge">실사용 검증 완료</div>
+            <div class="star-box-title">
+              수출 중견기업 SR·QA 실무진,<br>
+              <span>초기 대시보드를 실무에서 직접 사용 중</span>
+            </div>
+            <div class="star-box-desc">
+              공장 인증·감사 관리 핵심 기능을 선행 구현하여, 실제 수출 중견기업의 SR·QA 실무 담당자가 현재 운영 업무에 활용하고 있습니다. 설문이 아닌 <strong style="color:#fff;">실무 환경에서의 실제 사용</strong>으로 수요와 서비스 적용 가능성을 검증하였습니다.
+            </div>
+            <div class="star-metrics">
+              <div class="star-metric">
+                <div class="num">현업</div>
+                <div class="lbl">SR·QA 실무 환경</div>
+              </div>
+              <div class="star-metric">
+                <div class="num">실사용</div>
+                <div class="lbl">설문 아닌 실제 활용</div>
+              </div>
+              <div class="star-metric">
+                <div class="num">만족</div>
+                <div class="lbl">업무 효율화 확인</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:10px; display:flex; flex-direction:column; gap:6px;">
+            <div style="background:var(--white); border:1px solid var(--gray-200); border-left:3px solid var(--teal); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:10px; font-weight:700; color:var(--teal); margin-bottom:3px;">실사용 피드백 ①</div>
+              <div style="font-size:12px; color:var(--gray-700);">"인증 만기를 한눈에 보니까 <strong>놓칠 일이 없어졌어요.</strong> 이전엔 엑셀 여러 개 열어야 했는데."</div>
+            </div>
+            <div style="background:var(--white); border:1px solid var(--gray-200); border-left:3px solid #5DCAA5; border-radius:6px; padding:10px 12px;">
+              <div style="font-size:10px; font-weight:700; color:#0D7B6C; margin-bottom:3px;">실사용 피드백 ②</div>
+              <div style="font-size:12px; color:var(--gray-700);">"바이어 감사 준비할 때 <strong>뭐가 빠졌는지 바로 보여서</strong> 대응 속도가 달라졌습니다."</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div><!-- /interview-grid -->
+    </div>
+
+    <!-- ④ 트렌드·규모 -->
+    <div class="row-block">
+      <div class="row-title navy">트렌드·규모 — 확장하는 시장 기회</div>
+      <div class="trend-cols">
+        <div class="trend-card">
+          <div class="trend-card-label">글로벌 ESG 규제 강화</div>
+          <div class="trend-headline"><span>EU CSRD</span> 2025~</div>
+          <div class="trend-sub">공급망 전반 ESG 공시 의무 확대 → 국내 수출 제조기업 직접 영향</div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <span class="chip accent">EU CSRD</span>
+            <span class="chip accent">탄소국경세</span>
+            <span class="chip accent">바이어 자체 ESG 심사</span>
+          </div>
+        </div>
+        <div class="trend-card">
+          <div class="trend-card-label">국내 수출 중소·중견기업 규모</div>
+          <div class="trend-headline"><span>87,000+</span>개사</div>
+          <div class="trend-sub">국내 수출 중소·중견 제조기업 — SR·QA·ESG 실무자 보유</div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <span class="chip blue">SaaS 월 구독</span>
+            <span class="chip blue">초기 진입 레퍼런스 확보</span>
+            <span class="chip blue">ESG 데이터 자산 축적</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑤ BOTTOM SUMMARY -->
+    <div class="summary-row">
+      <div class="summary-col">
+        <div class="summary-col-label">문제점 ①</div>
+        <span class="chip accent">인증·감사 분산</span><br>
+        <span class="chip accent">만기 누락 위험</span>
+        <div class="summary-col-arrow">↓</div>
+        <span class="summary-tag accent">통합 관리</span>
+      </div>
+      <div class="summary-col">
+        <div class="summary-col-label">문제점 ②</div>
+        <span class="chip accent">Gap 수작업 비교</span><br>
+        <span class="chip accent">사전 파악 불가</span>
+        <div class="summary-col-arrow">↓</div>
+        <span class="summary-tag blue">자동 식별</span>
+      </div>
+      <div class="summary-col">
+        <div class="summary-col-label">문제점 ③</div>
+        <span class="chip blue">후속조치 추적</span><br>
+        <span class="chip blue">구조 없음</span>
+        <div class="summary-col-arrow">↓</div>
+        <span class="summary-tag blue">Action 연결</span>
+      </div>
+      <div class="summary-col">
+        <div class="summary-col-label">문제점 ④</div>
+        <span class="chip teal">ESG 수작업</span><br>
+        <span class="chip teal">실무 부담 가중</span>
+        <div class="summary-col-arrow">↓</div>
+        <span class="summary-tag teal">AI 자동화</span>
+      </div>
+      <div class="summary-col" style="background:var(--navy);">
+        <div class="summary-col-label" style="color:rgba(255,255,255,0.5);">솔루션</div>
+        <div style="color:#5DCAA5; font-size:13px; font-weight:900; line-height:1.4; margin: 8px 0;">컴플라이언스·ESG<br>통합 운영 플랫폼</div>
+        <div style="color:rgba(255,255,255,0.6); font-size:10px; line-height:1.5;">수출 중견기업<br>현업 실사용 검증 완료</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main-layout -->
+
+</body>
+</html>

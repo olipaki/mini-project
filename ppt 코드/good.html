@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>실무자 만족도 조사 결과</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #fff;
+  color: #1A1A1A;
+  padding: 28px 32px 32px;
+  width: 880px;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #0B1C3D;
+}
+.header-left {}
+.header-tag {
+  display: inline-block;
+  background: #0D7B6C; color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 10px; border-radius: 3px;
+  letter-spacing: 0.07em; margin-bottom: 6px;
+}
+.header-title {
+  font-size: 17px; font-weight: 900; color: #0B1C3D;
+  line-height: 1.3;
+}
+.header-title span { color: #0D7B6C; }
+.header-meta {
+  font-size: 11px; color: #6B6966; margin-top: 4px;
+}
+.header-right {
+  text-align: right;
+}
+.response-num { font-size: 36px; font-weight: 900; color: #0B1C3D; line-height: 1; }
+.response-label { font-size: 11px; color: #6B6966; margin-top: 2px; }
+
+/* ── TOP METRICS ── */
+.metrics-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 10px; margin-bottom: 18px;
+}
+.metric-card {
+  border-radius: 8px;
+  padding: 14px 16px;
+  border: 1px solid;
+}
+.metric-card.green { background: #E1F5EE; border-color: #9FE1CB; }
+.metric-card.navy  { background: #EAF2FB; border-color: #B5D4F4; }
+.metric-card.teal  { background: #E1F5EE; border-color: #9FE1CB; }
+.metric-card.dark  { background: #0B1C3D; border-color: #0B1C3D; }
+
+.metric-num {
+  font-size: 28px; font-weight: 900; line-height: 1.1;
+}
+.metric-card.green .metric-num { color: #0D7B6C; }
+.metric-card.navy  .metric-num { color: #1C5FA8; }
+.metric-card.teal  .metric-num { color: #0D7B6C; }
+.metric-card.dark  .metric-num { color: #5DCAA5; }
+
+.metric-label {
+  font-size: 11px; font-weight: 500; margin-top: 2px;
+  line-height: 1.4;
+}
+.metric-card.green .metric-label { color: #054037; }
+.metric-card.navy  .metric-label { color: #0B1C3D; }
+.metric-card.teal  .metric-label { color: #054037; }
+.metric-card.dark  .metric-label { color: rgba(255,255,255,0.65); }
+
+.metric-sub {
+  font-size: 10px; margin-top: 5px;
+  display: flex; align-items: center; gap: 3px;
+}
+.metric-card.green .metric-sub { color: #0D7B6C; }
+.metric-card.navy  .metric-sub { color: #1C5FA8; }
+.metric-card.teal  .metric-sub { color: #0D7B6C; }
+.metric-card.dark  .metric-sub { color: #5DCAA5; }
+
+.star { color: #F5A623; font-size: 12px; }
+
+/* ── TWO COL LAYOUT ── */
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 14px;
+}
+
+/* ── SECTION CARD ── */
+.sec-card {
+  border: 1px solid #E0DED6;
+  border-radius: 8px; overflow: hidden;
+}
+.sec-card-header {
+  padding: 8px 14px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 6px;
+}
+.sec-card-header.teal  { background: #0D7B6C; color: #fff; }
+.sec-card-header.navy  { background: #0B1C3D; color: #fff; }
+.sec-card-header.blue  { background: #1C5FA8; color: #fff; }
+.sec-card-header.accent { background: #E85D24; color: #fff; }
+.sec-card-body { padding: 12px 14px; }
+
+/* ── BAR ITEMS ── */
+.bar-item { margin-bottom: 7px; }
+.bar-item:last-child { margin-bottom: 0; }
+.bar-row-top {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 3px;
+}
+.bar-lbl { font-size: 11px; color: #3D3D3A; }
+.bar-pct { font-size: 11px; font-weight: 700; }
+.bar-track { height: 16px; background: #F5F4F0; border-radius: 3px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 3px;
+  display: flex; align-items: center; padding: 0 6px;
+  font-size: 9px; font-weight: 700; color: #fff;
+}
+.bf-teal  { background: #0D7B6C; }
+.bf-navy  { background: #1C5FA8; }
+.bf-teal2 { background: #5DCAA5; color: #054037; }
+
+/* ── QUOTES ── */
+.quote-list { display: flex; flex-direction: column; gap: 8px; }
+.quote {
+  background: #F5F4F0;
+  border-left: 3px solid;
+  border-radius: 0 6px 6px 0;
+  padding: 9px 11px;
+  font-size: 11px; color: #3D3D3A; line-height: 1.6;
+}
+.quote.teal  { border-color: #0D7B6C; }
+.quote.navy  { border-color: #0B1C3D; }
+.quote.blue  { border-color: #1C5FA8; }
+.quote strong { color: #0B1C3D; font-weight: 700; }
+.quote-meta {
+  margin-top: 4px; font-size: 10px; color: #6B6966;
+  display: flex; gap: 5px; align-items: center;
+}
+.tag {
+  font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 10px;
+}
+.tag.teal  { background: #E1F5EE; color: #0D7B6C; }
+.tag.navy  { background: #EAF2FB; color: #0B1C3D; }
+.tag.blue  { background: #EAF2FB; color: #1C5FA8; }
+
+/* ── TIME SAVING ── */
+.time-items { display: flex; flex-direction: column; gap: 7px; }
+.time-item {
+  display: flex; align-items: center; gap: 10px;
+}
+.time-label { font-size: 11px; color: #3D3D3A; width: 110px; flex-shrink: 0; }
+.time-dots { display: flex; gap: 3px; }
+.dot {
+  width: 14px; height: 14px; border-radius: 3px;
+}
+.dot.filled  { background: #0D7B6C; }
+.dot.filled2 { background: #5DCAA5; }
+.dot.empty   { background: #E0DED6; }
+
+/* ── WANT MORE ── */
+.want-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.want-chip {
+  font-size: 11px; font-weight: 500;
+  padding: 4px 11px; border-radius: 12px;
+  border: 1px solid;
+}
+.want-chip.teal { background: #E1F5EE; border-color: #9FE1CB; color: #054037; }
+.want-chip.blue { background: #EAF2FB; border-color: #B5D4F4; color: #0B1C3D; }
+.want-chip.gray { background: #F5F4F0; border-color: #E0DED6; color: #3D3D3A; }
+
+/* ── BOTTOM STAMP ── */
+.stamp {
+  background: #0B1C3D;
+  border-radius: 8px;
+  padding: 14px 20px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.stamp-left {
+  font-size: 13px; font-weight: 700; color: #5DCAA5;
+  line-height: 1.4;
+}
+.stamp-left span { color: rgba(255,255,255,0.7); font-weight: 400; font-size: 11px; display: block; margin-top: 2px; }
+.stamp-right {
+  display: flex; gap: 16px;
+}
+.stamp-stat { text-align: center; }
+.stamp-stat .n { font-size: 20px; font-weight: 900; color: #5DCAA5; }
+.stamp-stat .l { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+.stamp-divider { width: 1px; background: rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-tag">고객 개발 · 실사용 만족도 조사</div>
+    <div class="header-title">수출 중견기업 SR·QA 실무자<br><span>구글폼 사용 만족도 설문 결과</span></div>
+    <div class="header-meta">조사 기간 2026.03.04 ~ 2026.03.25 &nbsp;|&nbsp; 수출 중견기업 SR·QA·ESG 실무 담당자</div>
+  </div>
+  <div class="header-right">
+    <div class="response-num">6명</div>
+    <div class="response-label">실무자 직접 응답</div>
+  </div>
+</div>
+
+<!-- ── TOP METRICS ── -->
+<div class="metrics-row">
+  <div class="metric-card green">
+    <div class="metric-num">100%</div>
+    <div class="metric-label">업무 도움도<br>5점 만점 응답</div>
+    <div class="metric-sub"><span class="star">★★★★★</span> 6명 전원</div>
+  </div>
+  <div class="metric-card navy">
+    <div class="metric-num">100%</div>
+    <div class="metric-label">사용 직관성<br>"쉽다" 응답</div>
+    <div class="metric-sub">매우 쉬움 5명 · 쉬움 1명</div>
+  </div>
+  <div class="metric-card teal">
+    <div class="metric-num">100%</div>
+    <div class="metric-label">속도 만족도<br>"빠르다" 응답</div>
+    <div class="metric-sub">6명 전원 빠르다</div>
+  </div>
+  <div class="metric-card dark">
+    <div class="metric-num">100%</div>
+    <div class="metric-label">계속 사용 의향<br>"계속 쓰고 싶다"</div>
+    <div class="metric-sub">6명 전원 재사용 의향</div>
+  </div>
+</div>
+
+<!-- ── TWO COL: 처리시간 절약 + 실무자 생생 후기 ── -->
+<div class="two-col">
+
+  <!-- 처리 시간 절약 -->
+  <div class="sec-card">
+    <div class="sec-card-header teal">⏱ 기존 대비 처리 시간 절약 체감</div>
+    <div class="sec-card-body">
+      <div class="time-items">
+        <div class="time-item">
+          <div class="time-label">1시간 이상 절약</div>
+          <div class="time-dots">
+            <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+            <div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div>
+          </div>
+          <div style="font-size:11px; color:#0D7B6C; font-weight:700; margin-left:4px;">3명 (50%)</div>
+        </div>
+        <div class="time-item">
+          <div class="time-label">30분 이상 절약</div>
+          <div class="time-dots">
+            <div class="dot filled2"></div><div class="dot filled2"></div>
+            <div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div>
+          </div>
+          <div style="font-size:11px; color:#0D7B6C; font-weight:700; margin-left:4px;">2명 (33%)</div>
+        </div>
+        <div class="time-item">
+          <div class="time-label">수 시간 이상 절약</div>
+          <div class="time-dots">
+            <div class="dot filled"></div>
+            <div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div><div class="dot empty"></div>
+          </div>
+          <div style="font-size:11px; color:#0D7B6C; font-weight:700; margin-left:4px;">1명 (17%)</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; padding:10px 12px; background:#E1F5EE; border-radius:6px; font-size:11px; color:#054037; line-height:1.6;">
+        <strong style="color:#0D7B6C;">6명 전원</strong>이 기존 엑셀 대비 <strong style="color:#0D7B6C;">30분 ~ 수 시간</strong>의 업무 처리 시간 절감을 체감
+      </div>
+    </div>
+  </div>
+
+  <!-- 직관성 상세 -->
+  <div class="sec-card">
+    <div class="sec-card-header navy">📊 사용 직관성 & 속도</div>
+    <div class="sec-card-body">
+      <div class="bar-item">
+        <div class="bar-row-top">
+          <span class="bar-lbl">매우 쉬웠다</span>
+          <span class="bar-pct" style="color:#0D7B6C;">83%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bf-teal" style="width:83%;">5명</div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-row-top">
+          <span class="bar-lbl">대체로 쉬웠다</span>
+          <span class="bar-pct" style="color:#5DCAA5;">17%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bf-teal2" style="width:17%;">1명</div></div>
+      </div>
+
+      <div style="margin-top: 10px; margin-bottom: 7px; font-size:10px; font-weight:700; color:#6B6966; letter-spacing:0.05em;">속도 만족도</div>
+      <div class="bar-item">
+        <div class="bar-row-top">
+          <span class="bar-lbl">빠르다</span>
+          <span class="bar-pct" style="color:#1C5FA8;">100%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bf-navy" style="width:100%;">6명 전원</div></div>
+      </div>
+
+      <div style="margin-top:10px; padding:8px 10px; background:#EAF2FB; border-radius:6px; font-size:11px; color:#0B1C3D; line-height:1.5;">
+        단, 엑셀 업로드·로딩 구간에서 <strong>속도 개선 요청 1건</strong> 접수 → 2단계 개선 반영 예정
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── TWO COL: 생생 후기 + 추가 기능 요청 ── -->
+<div class="two-col">
+
+  <!-- 실무자 후기 -->
+  <div class="sec-card">
+    <div class="sec-card-header teal">💬 실무자 생생 후기 (원문)</div>
+    <div class="sec-card-body">
+      <div class="quote-list">
+        <div class="quote teal">
+          "방대한 엑셀 파일을 일일이 뒤졌어야 했는데, <strong>각 기준별·공장별 자료를 읽기 쉽게 확인</strong>할 수 있습니다."
+          <div class="quote-meta"><span class="tag teal">시간 절약</span> SR 담당자</div>
+        </div>
+        <div class="quote navy">
+          "인증 만기가 한눈에 보이니 <strong>놓칠 일이 없어졌어요.</strong> 업무에 많은 도움이 될 것 같습니다."
+          <div class="quote-meta"><span class="tag navy">리스크 감소</span> QA 담당자</div>
+        </div>
+        <div class="quote blue">
+          "사용자가 raw data만 제대로 작성해서 파일 넣을 경우, <strong>지금보다도 더욱 업무에 도움될 것</strong>으로 보입니다."
+          <div class="quote-meta"><span class="tag blue">활용 가능성</span> SR·QA 담당자</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 추가 기능 요청 -->
+  <div class="sec-card">
+    <div class="sec-card-header accent">✏️ 추가 기능 요청 & 개선 의견</div>
+    <div class="sec-card-body">
+      <div style="font-size:10px; font-weight:700; color:#6B6966; letter-spacing:0.05em; margin-bottom:8px;">요청된 추가 기능</div>
+      <div class="want-chips" style="margin-bottom:12px;">
+        <span class="want-chip teal">ESG 관리 기능</span>
+        <span class="want-chip teal">데이터 자동화 확장</span>
+        <span class="want-chip blue">분석 기능 강화</span>
+        <span class="want-chip blue">체크박스 시각 구분 개선</span>
+        <span class="want-chip gray">엑셀 업로드 속도 개선</span>
+      </div>
+
+      <div style="font-size:10px; font-weight:700; color:#6B6966; letter-spacing:0.05em; margin-bottom:7px;">개선 의견 요약</div>
+      <div style="display:flex; flex-direction:column; gap:5px;">
+        <div style="display:flex; gap:8px; font-size:11px; color:#3D3D3A; align-items:flex-start;">
+          <span style="background:#FFF0EA; color:#E85D24; font-size:10px; font-weight:700; padding:1px 6px; border-radius:3px; flex-shrink:0; margin-top:1px;">개선</span>
+          상단 평가현황 체크박스 — 충족 여부 시각적 구분 강화 요청
+        </div>
+        <div style="display:flex; gap:8px; font-size:11px; color:#3D3D3A; align-items:flex-start;">
+          <span style="background:#FFF0EA; color:#E85D24; font-size:10px; font-weight:700; padding:1px 6px; border-radius:3px; flex-shrink:0; margin-top:1px;">개선</span>
+          엑셀 데이터 업로드·로딩 속도 최적화 요청
+        </div>
+        <div style="display:flex; gap:8px; font-size:11px; color:#3D3D3A; align-items:flex-start;">
+          <span style="background:#E1F5EE; color:#0D7B6C; font-size:10px; font-weight:700; padding:1px 6px; border-radius:3px; flex-shrink:0; margin-top:1px;">확장</span>
+          ESG·분석·자동화 기능 2단계 추가 개발 강력 요청
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── BOTTOM STAMP ── -->
+<div class="stamp">
+  <div class="stamp-left">
+    6명 전원 5점 만점 · 전원 재사용 의향 확인
+    <span>설문이 아닌 실무 환경 실사용 후 응답 — 수요와 서비스 적용 가능성 검증 완료</span>
+  </div>
+  <div class="stamp-right">
+    <div class="stamp-stat">
+      <div class="n">5.0</div>
+      <div class="l">평균 만족도</div>
+    </div>
+    <div class="stamp-divider"></div>
+    <div class="stamp-stat">
+      <div class="n">6/6</div>
+      <div class="l">재사용 의향</div>
+    </div>
+    <div class="stamp-divider"></div>
+    <div class="stamp-stat">
+      <div class="n">30분~</div>
+      <div class="l">시간 절약 체감</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
